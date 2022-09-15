@@ -1,7 +1,6 @@
 package com.mycompany.app;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.hashicorp.cdktf.Fn;
 import com.hashicorp.cdktf.TerraformStack;
 import com.hashicorp.cdktf.providers.docker.DockerProvider;
@@ -20,12 +19,7 @@ public class MainStack extends TerraformStack {
                 Fn.tonumber(Fn.trimprefix("cpc_123456", "cpc_"))
         );
 
-        final String valueAsString;
-        try {
-            valueAsString = new ObjectMapper().writeValueAsString(testingResource);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        final String valueAsString = new Gson().toJson(testingResource);
 
         DockerProvider.Builder.create(this, "docker")
                 .build();
